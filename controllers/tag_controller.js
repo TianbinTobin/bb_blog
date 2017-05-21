@@ -9,7 +9,7 @@ const createTag = function (req, res) {
     if (name === undefined || name === "") {
         return res.json(result(false, '标签名不能为空'));
     }
-    let query = Tag.findOne({name:name}).exec().catch(console.error);
+    let query = Tag.findOne({name: name}).exec().catch(console.error);
     query.then(function (doc) {
         if (doc !== null) {
             return res.json(result(false, '该标签已存在'));
@@ -26,10 +26,10 @@ const createTag = function (req, res) {
 };
 
 const deleteTag = function (req, res) {
-    const name = req.body.name;
-    let query = Tag.remove({name: name}).exec().catch(console.error);
+    const _id = req.body._id;
+    let query = Tag.remove({_id: _id}).exec().catch(console.error);
     query.then(function (doc) {
-        if(doc !== null) {
+        if (doc !== null) {
             return res.json(result(true, '删除成功'));
         }
     });
@@ -40,19 +40,22 @@ const modifyTag = function (req, res) {
     const name = req.body.name;
     let query = Tag.update({_id: _id}, {name: name}).exec().catch(console.error);
     query.then(function (doc) {
-        if(doc !== null) {
+        if (doc !== null) {
             return res.json(result(true, '更新成功'));
         }
     });
 };
 
 const getAllTags = function (req, res) {
-    let query2 = Tag.count().exec().catch(console.err);
+    let name = req.body.name ? req.body.name : null;
+    let page = req.body.page ? req.body.page : 1;
+    let size = req.body.size ? req.body.size : 10;
+    let query2 = Tag.count({name}).exec().catch(console.err);
     query2.then(function (total) {
-        let query1 = Tag.find().exec().catch(console.error);
+        let query1 = Tag.find({name}).skip((page - 1) * size).limit(size).exec().catch(console.error);
         query1.then(function (doc) {
             const data = {};
-            if(doc.length !== 0) {
+            if (doc.length !== 0) {
                 const docArr = [];
                 for (let i = 0, len = doc.length; i < len; i++) {
                     docArr.push(doc[i].toJSON());
