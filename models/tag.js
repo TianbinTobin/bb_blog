@@ -1,0 +1,16 @@
+/**
+ * Created by Tianbin on 2017/5/21.
+ */
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const tagSchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    }
+}, {versionKey: false});
+tagSchema.set('toJSON', {getters: true, virtuals: true});
+tagSchema.set('toObject', {getters: true, virtuals: true});
+
+module.exports = mongoose.model('tag', tagSchema);

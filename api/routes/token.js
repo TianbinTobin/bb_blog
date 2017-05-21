@@ -7,6 +7,8 @@ const router = express.Router();
 
 $.initUser();
 router.post('/', $.login);
+router.post('/register', $.register);
+router.post('/check', $.check);
 
 module.exports = router;
 
