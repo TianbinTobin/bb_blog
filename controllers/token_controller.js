@@ -30,11 +30,15 @@ const login = function (req, res) {
     query.then(function (user) {
         if (user !== null) {
             if (user.password === password) {
+                /**
+                 * 生成token
+                 */
                 const token = jwt.sign({
                     uid: user._id,
                     name: user.name,
                     exp: Math.floor(Date.now() / 1000) + 60 * 60  //1 hours
                 }, config.jwt.secret);
+
                 const body = {
                     success: true,
                     uid: user._id,

@@ -4,6 +4,11 @@
 const Tag = require('../models/tag');
 const result = require('../utils/result');
 
+/**
+ * 添加标签
+ * @param req
+ * @param res
+ */
 const createTag = function (req, res) {
     const name = req.body.name;
     if (name === undefined || name === "") {
@@ -15,16 +20,21 @@ const createTag = function (req, res) {
             return res.json(result(false, '该标签已存在'));
         } else {
             let tag = new Tag({name: name});
-            tag.save(function (err) {
+            tag.save(function (err, doc) {
                 if (err) {
                     return res.json(result(false, '服务器错误'), 500);
                 }
-                return res.json(result(true, tag.toJSON()));
+                return res.json(result(true, doc));
             });
         }
     });
 };
 
+/**
+ * 删除标签
+ * @param req
+ * @param res
+ */
 const deleteTag = function (req, res) {
     const _id = req.body._id;
     let query = Tag.remove({_id: _id}).exec().catch(console.error);
@@ -35,6 +45,11 @@ const deleteTag = function (req, res) {
     });
 };
 
+/**
+ * 修改标签
+ * @param req
+ * @param res
+ */
 const modifyTag = function (req, res) {
     const _id = req.body._id;
     const name = req.body.name;
@@ -46,6 +61,11 @@ const modifyTag = function (req, res) {
     });
 };
 
+/**
+ * 获取所有标签
+ * @param req
+ * @param res
+ */
 const getAllTags = function (req, res) {
     let name = req.body.name ? req.body.name : null;
     let page = req.body.page ? req.body.page : 1;
