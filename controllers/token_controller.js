@@ -36,7 +36,7 @@ const login = function (req, res) {
                 const token = jwt.sign({
                     uid: user._id,
                     name: user.name,
-                    exp: Math.floor(Date.now() / 1000) + 60 * 60  //1 hours
+                    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 2  //2 hours
                 }, config.jwt.secret);
 
                 const body = {
