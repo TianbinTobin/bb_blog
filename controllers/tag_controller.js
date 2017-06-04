@@ -67,12 +67,16 @@ const modifyTag = function (req, res) {
  * @param res
  */
 const getAllTags = function (req, res) {
-    let name = req.body.name ? req.body.name : null;
+    let name = req.body.name;
     let page = req.body.page ? req.body.page : 1;
     let size = req.body.size ? req.body.size : 10;
-    let query2 = Tag.count({name}).exec().catch(console.err);
+    let param = {};
+    if (name) {
+        param.name = name;
+    }
+    let query2 = Tag.count(param).exec().catch(console.err);
     query2.then(function (total) {
-        let query1 = Tag.find({name}).skip((page - 1) * size).limit(size).exec().catch(console.error);
+        let query1 = Tag.find(param).skip((page - 1) * size).limit(size).exec().catch(console.error);
         query1.then(function (doc) {
             const data = {};
             if (doc.length !== 0) {
